@@ -9,10 +9,12 @@ import morgan from "morgan";
 import cors from "cors";
 import blogRoutes from "./routes/blogRoutes";
 
+// This single line reads your .env file and loads everything into process.env. 
+// It must be called before anything else that needs environment variables — that's why it's at the top.
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors()); // cross origin resource sharing 
 app.use(morgan("dev"));
 app.use(express.json());
 
