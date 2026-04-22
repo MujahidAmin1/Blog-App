@@ -1,6 +1,7 @@
 import type { Response } from "express";
 import Blog from "../models/blog";
 import type { AuthRequest } from "../middleware/auth";
+import { uploadToCloudinary } from "../utils/uploadToCloudinary";
 
 export async function createBlog(req: AuthRequest, res: Response) {
   try {
@@ -12,11 +13,10 @@ export async function createBlog(req: AuthRequest, res: Response) {
       content,
       author: req.userId,
     };
-
     if (req.file) {
-      blogData.imageUrl = `/upload/${req.file.filename}`;
+      const imageUrl = await uploadToCloudinary(req.file.buffer, "blogs");
+      blogData.imageUrl = imageUrl;
     }
-
     const blog = await Blog.create(blogData);
     return res.status(200).json({ blog });
   } catch (error) {
@@ -79,4 +79,3 @@ export async function deleteBlog(req: AuthRequest, res: Response) {
     return res.status(500).json({ message: "Failed to delete blog" });
   }
 }
-
