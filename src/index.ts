@@ -9,6 +9,7 @@ import { connectDB } from "./config/database";
 import morgan from "morgan";
 import cors from "cors";
 import blogRoutes from "./routes/blogRoutes";
+import adminRoutes from "./routes/adminRoute";
 import path from "path";
 
 // This single line reads your .env file and loads everything into process.env. 
@@ -26,6 +27,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 app.get("/", (req, res) => {
