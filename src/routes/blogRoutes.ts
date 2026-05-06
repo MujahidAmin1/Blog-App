@@ -6,9 +6,11 @@ import {
     updateBlog,
     deleteBlog,
 } from "../controllers/blogController";
+import { createBlogSchema, updateBlogSchema } from "../validation/schemas";
 
 import { requireAuth } from "../middleware/auth";
 import upload from "../utils/uploader";
+import { validate } from "../middleware/validate";
 
 const router = Router();
 
@@ -201,7 +203,7 @@ router.get("/:id", getBlog);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/", requireAuth, upload.single("image"), createBlog);
+router.post("/", requireAuth, upload.single("image"), validate(createBlogSchema), createBlog);
 
 /**
  * @openapi
@@ -272,7 +274,7 @@ router.post("/", requireAuth, upload.single("image"), createBlog);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put("/:id", requireAuth, upload.single("image"), updateBlog);
+router.put("/:id", requireAuth, upload.single("image"), validate(updateBlogSchema), updateBlog);
 
 /**
  * @openapi
