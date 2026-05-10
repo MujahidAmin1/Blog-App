@@ -1,21 +1,15 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/user";
 import { generateTokens } from "../utils/generateTokens";
 import RefreshToken from "../models/refreshToken";
+import { RegisterInput, LoginInput } from "../validation/schemas";
 
 // register a new user
 
-export async function register(req: Request, res: Response) {
+export async function register(req: Request, res: Response, next: NextFunction) {
   try {
-    const { name, email, password } = req.body as {
-      name: string;
-      email: string;
-      password: string;
-    };
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+    const { name, email, password } = req.body as RegisterInput;
     const existing = await User.findOne({ email });
     if (existing) {
       return res.status(400).json({ message: "Email already exists" });
@@ -35,18 +29,16 @@ export async function register(req: Request, res: Response) {
       user: { id: String(user._id), name, email },
     });
   } catch (error) {
-    return res.status(500).json({ message: "Registration failed" });
+    // return res.status(500).json({ message: "Registration failed" });
+    next(error);
   }
 }
 
 // Login an existing user
 
-export async function login(req: Request, res: Response) {
+export async function login(req: Request, res: Response, next: NextFunction) {
   try {
-    const { email, password } = req.body as { email: string; password: string };
-    if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+    const { email, password } = req.body as LoginInput;
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -67,12 +59,13 @@ export async function login(req: Request, res: Response) {
       user: { id: String(user._id), name: user.name, email: user.email },
     });
   } catch (error) {
-    return res.status(500).json({ message: "Login failed" });
+    // return res.status(500).json({ message: "Login failed" });
+    next(error)
   }
 }
 
 // token refresh
-export async function refresh(req: Request, res: Response) {
+export async function refresh(req: Request, res: Response, next: NextFunction) {
   try {
     const { refreshToken } = req.body as { refreshToken: string };
 
@@ -107,13 +100,14 @@ export async function refresh(req: Request, res: Response) {
       refreshToken: newRefreshToken,
     });
   } catch (error) {
-    return res.status(500).json({ message: "Token refresh failed" });
+    // return res.status(500).json({ message: "Token refresh failed" });
+    next(error)
   }
 }
 
 // Logout
 
-export async function logout(req: Request, res: Response) {
+export async function logout(req: Request, res: Response, next: NextFunction) {
   try {
     const { refreshToken } = req.body as { refreshToken: string };
 
@@ -123,8 +117,10 @@ export async function logout(req: Request, res: Response) {
 
     return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Logout failed" });
+    // return res.status(500).json({ message: "Logout failed" });
+    next(error)
   }
 }
 
 export default { register, login, refresh, logout };
+

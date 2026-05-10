@@ -6,7 +6,7 @@ import {
     updateBlog,
     deleteBlog,
 } from "../controllers/blogController";
-import { createBlogSchema, updateBlogSchema } from "../validation/schemas";
+import { createBlogSchema, updateBlogSchema,  paginationSchema } from "../validation/schemas";
 
 import { requireAuth } from "../middleware/auth";
 import upload from "../utils/uploader";
@@ -76,7 +76,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/blogs:
+ * /blogs:
  *   get:
  *     summary: List all blogs (newest first)
  *     tags: [Blogs]
@@ -100,11 +100,13 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/", listBlogs);
+router.get("/", validate(paginationSchema, "query"), listBlogs);
+//                                          ▲
+// second argument tells validate middleware to read from req.query instead of req.body
 
 /**
  * @openapi
- * /api/blogs/{id}:
+ * /blogs/{id}:
  *   get:
  *     summary: Get a single blog by id
  *     tags: [Blogs]
@@ -140,7 +142,7 @@ router.get("/:id", getBlog);
 
 /**
  * @openapi
- * /api/blogs:
+ * /blogs:
  *   post:
  *     summary: Create a new blog post
  *     tags: [Blogs]
@@ -207,7 +209,7 @@ router.post("/", requireAuth, upload.single("image"), validate(createBlogSchema)
 
 /**
  * @openapi
- * /api/blogs/{id}:
+ * /blogs/{id}:
  *   put:
  *     summary: Update a blog (only the author can update)
  *     tags: [Blogs]
@@ -278,7 +280,7 @@ router.put("/:id", requireAuth, upload.single("image"), validate(updateBlogSchem
 
 /**
  * @openapi
- * /api/blogs/{id}:
+ * /blogs/{id}:
  *   delete:
  *     summary: Delete a blog (only the author can delete)
  *     tags: [Blogs]

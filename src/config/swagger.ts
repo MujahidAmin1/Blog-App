@@ -8,7 +8,7 @@ const options: swaggerJsDoc.Options = {
       version: "1.0.0",
       description: "A simple Express Blog API with TypeScript and MongoDB",
     },
-    servers: [{ url: "http://localhost:3000" }],
+    servers: [{ url: "http://localhost:3000/api" }],
     components: {
       securitySchemes: {
         bearerAuth: {

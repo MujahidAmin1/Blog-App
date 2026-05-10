@@ -40,7 +40,7 @@ router.use(requireAuth, requireRole('admin'));
 
 /**
  * @openapi
- * /api/admin/users:
+ * /admin/users:
  *   get:
  *     summary: List all users (admin only)
  *     tags: [Admin]
@@ -81,7 +81,7 @@ router.get("/users", listUsers);
 
 /**
  * @openapi
- * /api/admin/users/{id}:
+ * /admin/users/{id}:
  *   delete:
  *     summary: Delete a user and all their blogs (admin only)
  *     tags: [Admin]
@@ -139,7 +139,7 @@ router.delete("/users/:id", deleteUser);
 
 /**
  * @openapi
- * /api/admin/blogs/{id}:
+ * /admin/blogs/{id}:
  *   delete:
  *     summary: Delete any blog post (admin only, no ownership check)
  *     tags: [Admin]

@@ -12,7 +12,6 @@ export async function generateTokens(
   const accessToken = jwt.sign(
     { userId: String(userId) , role},
     process.env.JWT_SECRET as string,
-
     { expiresIn: "15m" },
   );
 
@@ -22,13 +21,12 @@ export async function generateTokens(
   // 3. Set expiry — 7 days from now
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 7);
-
+  
   // 4. Save refresh token to MongoDB
   await RefreshToken.create({
     token: refreshTokenValue,
     userId: String(userId),
     expiresAt,
   });
-
   return { accessToken, refreshToken: refreshTokenValue };
 }

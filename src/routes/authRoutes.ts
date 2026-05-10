@@ -39,7 +39,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/auth/register:
+ * /auth/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Auth]
@@ -87,7 +87,7 @@ router.post("/register", validate(registerSchema), register),
 
 /**
  * @openapi
- * /api/auth/login:
+ * /auth/login:
  *   post:
  *     summary: Login an existing user
  *     tags: [Auth]
@@ -132,7 +132,7 @@ router.post("/login", validate(loginSchema), login);
 
 /**
  * @openapi
- * /api/auth/refresh:
+ * /auth/refresh:
  *   post:
  *     summary: Refresh access token using a refresh token
  *     tags: [Auth]
@@ -178,7 +178,7 @@ router.post("/refresh", refresh);
 
 /**
  * @openapi
- * /api/auth/logout:
+ * /auth/logout:
  *   post:
  *     summary: Logout and invalidate the refresh token
  *     tags: [Auth]

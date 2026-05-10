@@ -58,7 +58,6 @@ export const updateBlogSchema = z.object({
   { error: "At least one field (title or content) must be provided" }
   // ▲ "error" not "message" in v4
 );
-
 // ─── Pagination schema ────────────────────────────────────────────────────────
 
 export const paginationSchema = z.object({
