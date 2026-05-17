@@ -4,6 +4,7 @@ import User from "../models/user";
 import { generateTokens } from "../utils/generateTokens";
 import RefreshToken from "../models/refreshToken";
 import { RegisterInput, LoginInput } from "../validation/schemas";
+import AppError from "../utils/appErrors";
 
 // register a new user
 
@@ -46,7 +47,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) {
-      return res.status(400).json({ message: "Invalid Credentials" });
+      // return res.status(400).json({ message: "Invalid Credentials" });
+      return new AppError("invalid credentials", 400);
     }
     const { accessToken, refreshToken } = await generateTokens(
       user._id,
